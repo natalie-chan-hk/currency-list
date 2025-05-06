@@ -3,7 +3,7 @@ import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { CurrencyInfo } from '../types/currency';
-import CurrencySearchIndex from '../services/searchIndex';
+import CurrencySearchIndex from '../services/currencySearchIndex';
 
 type CurrencySearchBarProps = {
   currencies: CurrencyInfo[];
