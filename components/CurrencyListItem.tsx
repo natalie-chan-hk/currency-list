@@ -22,9 +22,15 @@ const CurrencyListItem = ({
       testID={`currency-list-${item.id}`}
     >
       <View className="flex-1 flex-row items-center justify-between">
-        <View className="flex-row items-center space-x-4">
-          <Badge title={item.name.charAt(0)} />
-          <Text className="text-base font-medium">{item.name}</Text>
+        <View className="flex-row items-center space-x-4" style={{flexShrink:1}}>
+          <Badge title={item?.name?.charAt(0) || "--"} />
+          <Text
+            className="text-base font-medium"
+            numberOfLines={1}
+            style={{ flexShrink: 1, maxWidth: '90%' }}
+          >
+            {item.name}
+          </Text>
         </View>
         {showSymbol && (
             <View className="flex-row items-center space-x-4">
