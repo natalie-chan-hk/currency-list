@@ -10,7 +10,7 @@ type CurrencyListItemProps = {
   showSymbol?: boolean;
 };
 
-export const CurrencyListItem = ({
+const CurrencyListItem = ({
   item,
   onPress,
   showSymbol = false,
@@ -19,6 +19,7 @@ export const CurrencyListItem = ({
     <TouchableOpacity
       className="flex-row items-center p-4 border-b border-gray-200"
       onPress={() => onPress?.(item)}
+      testID={`currency-list-${item.id}`}
     >
       <View className="flex-1 flex-row items-center justify-between">
         <View className="flex-row items-center space-x-4">
@@ -39,3 +40,5 @@ export const CurrencyListItem = ({
     </TouchableOpacity>
   );
 };
+
+export default CurrencyListItem;

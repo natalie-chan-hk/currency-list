@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect} from 'react';
 import type { BottomTabScreenProps, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { CurrencyInfo } from '../../types/currency';
 import { StorageService } from '../../services/storage';
-import { CurrencyListFragment } from '../CurrencyListFragment';
+import CurrencyListFragment from '../CurrencyListFragment';
 import { RootTabParamList } from './type';
 type SearchTabProps = BottomTabScreenProps<RootTabParamList, 'Search'>;
 

@@ -1,22 +1,33 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, Keyboard } from 'react-native';
+import { useEffect, useState, useRef } from 'react';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { CurrencyInfo } from '../types/currency';
+import CurrencySearchIndex from '../services/searchIndex';
 
 type CurrencySearchBarProps = {
+  currencies: CurrencyInfo[];
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  onSearchResults: (results: CurrencyInfo[]) => void;
 };
 
-export const CurrencySearchBar = ({
+const CurrencySearchBar = ({
+  currencies,
   searchQuery,
   setSearchQuery,
+  onSearchResults,
 }: CurrencySearchBarProps) => {
   const iconOpacity = useSharedValue(0);
   const iconScale = useSharedValue(0.5);
   const iconWidth = useSharedValue(0);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
+  const searcherRef = useRef<CurrencySearchIndex | null>(null);
+
+  useEffect(() => {
+    searcherRef.current = new CurrencySearchIndex(currencies);
+  }, [currencies]);
 
   useEffect(() => {
     if (isFocused) {
@@ -39,36 +50,53 @@ export const CurrencySearchBar = ({
   const handleClear = () => {
     setSearchQuery('');
     inputRef.current?.blur();
+    onSearchResults(currencies);
+  };
+
+  const performSearch = (query: string) => {
+    if (searcherRef.current) {
+      const results = searcherRef.current.search(query);
+      onSearchResults(results);
+    }
+  };
+
+  const handleQueryChange = (query: string) => {
+    setSearchQuery(query);
+    performSearch(query);
   };
 
   return (
-    <View className="py-4 px-2 border-b border-gray-200">
+    <View className="py-4 px-2 border-b border-gray-200" testID="search-bar">
       <View className="w-full flex-row items-center">
         <Animated.View style={[animatedIconStyle]} pointerEvents={isFocused ? 'auto' : 'none'}>
-          <TouchableOpacity onPress={handleClear} className="flex-1 justify-center items-center">
-            <Ionicons name="arrow-back-outline" size={20} color="gray" />
-          </TouchableOpacity>
+          {isFocused && (
+            <TouchableOpacity onPress={handleClear} className="flex-1 justify-center items-center" testID="arrow-back-button">
+              <Ionicons name="arrow-back-outline" size={20} color="gray" />
+            </TouchableOpacity>
+          )}
         </Animated.View>
-
         <Animated.View className="flex-1">
           <TextInput
             ref={inputRef}
             className="h-10 border border-gray-300 rounded-lg px-4"
             placeholder="Search currency"
             value={searchQuery}
-            onChangeText={setSearchQuery}
+            onChangeText={handleQueryChange}
             autoCapitalize="none"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
         </Animated.View>
-
         <Animated.View style={[animatedIconStyle]} pointerEvents={isFocused ? 'auto' : 'none'}>
-          <TouchableOpacity onPress={handleClear} className="flex-1 justify-center items-center">
-            <Ionicons name="close-outline" size={20} color="gray" />
-          </TouchableOpacity>
+          {isFocused && (
+            <TouchableOpacity onPress={handleClear} className="flex-1 justify-center items-center" testID="close-button">
+              <Ionicons name="close-outline" size={20} color="gray" />
+            </TouchableOpacity>
+          )}
         </Animated.View>
       </View>
     </View>
   );
 };
+
+export default CurrencySearchBar;
