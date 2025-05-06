@@ -6,16 +6,18 @@ import { MenuButton } from '../buttons/MenuButton';
 import { StorageService } from '../../services/storage';
 import { CRYPTO_CURRENCIES, FIAT_CURRENCIES } from '../../constants/currency';
 import Toast from '../Toast';
-import {ToastProps} from '../Toast';
- 
+import { ToastProps } from '../Toast';
+
 type HomeTabProps = BottomTabScreenProps<RootTabParamList, 'Home'>;
 
 const HomeTab = ({ navigation }: HomeTabProps) => {
   const [toast, setToast] = useState<ToastProps | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleClearData = useCallback(() => {
+  const handleClearData = useCallback(async () => {
+    setIsLoading(true);
     try {
-      StorageService.clearAll();
+      await StorageService.clearAll();
       setToast({
         message: 'Data cleared successfully',
         type: 'success',
@@ -25,13 +27,15 @@ const HomeTab = ({ navigation }: HomeTabProps) => {
         message: 'Failed to clear data',
         type: 'error',
       });
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
-  const handleInsertData = useCallback(() => {
+  const handleInsertData = useCallback(async () => {
+    setIsLoading(true);
     try {
-      StorageService.setCryptoCurrencies(CRYPTO_CURRENCIES);
-      StorageService.setFiatCurrencies(FIAT_CURRENCIES);
+      await StorageService.initializeData();
       setToast({
         message: 'Data inserted successfully',
         type: 'success',
@@ -41,6 +45,8 @@ const HomeTab = ({ navigation }: HomeTabProps) => {
         message: 'Failed to insert data',
         type: 'error',
       });
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -60,22 +66,27 @@ const HomeTab = ({ navigation }: HomeTabProps) => {
     {
       title: 'Clear Data',
       onPress: handleClearData,
+      disabled: isLoading,
     },
     {
       title: 'Insert Data',
       onPress: handleInsertData,
+      disabled: isLoading,
     },
     {
       title: 'Show Crypto',
       onPress: handleShowCrypto,
+      disabled: isLoading,
     },
     {
       title: 'Show Fiat',
       onPress: handleShowFiat,
+      disabled: isLoading,
     },
     {
       title: 'Show All',
       onPress: handleShowAll,
+      disabled: isLoading,
     },
   ];
 
@@ -88,6 +99,7 @@ const HomeTab = ({ navigation }: HomeTabProps) => {
               key={item.title}
               title={item.title}
               onPress={item.onPress}
+              disabled={item.disabled}
             />
           ))}
         </View>

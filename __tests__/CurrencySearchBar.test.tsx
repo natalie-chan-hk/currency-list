@@ -4,7 +4,7 @@ import CurrencySearchBar from '../components/CurrencySearchBar';
 import { CurrencyInfo } from '../types/currency';
 
 // Mock the CurrencySearchIndex
-jest.mock('../services/searchIndex', () => {
+jest.mock('../services/currencySearchIndex', () => {
   return jest.fn().mockImplementation(() => ({
     search: jest.fn().mockReturnValue([]),
   }));

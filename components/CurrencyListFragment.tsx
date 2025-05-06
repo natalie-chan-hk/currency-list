@@ -10,15 +10,17 @@ import CurrencyListItem from './CurrencyListItem';
 import { CRYPTO_CURRENCIES } from '../constants/currency';
 import CurrencySearchBar from './CurrencySearchBar';
 
-type CurrencyListFragmentProps = {
+export interface CurrencyListFragmentProps {
   currencies: CurrencyInfo[];
   onCurrencyPress?: (currency: CurrencyInfo) => void;
-}; 
+  isLoading?: boolean;
+}
 
-const CurrencyListFragment = ({
+const CurrencyListFragment: React.FC<CurrencyListFragmentProps> = ({
   currencies,
   onCurrencyPress,
-}: CurrencyListFragmentProps) => {
+  isLoading = false,
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCurrencies, setFilteredCurrencies] = useState<CurrencyInfo[]>(currencies);
 
@@ -34,12 +36,12 @@ const CurrencyListFragment = ({
       return (
         <CurrencyListItem 
           item={item} 
-          onPress={onCurrencyPress} 
           showSymbol={isCrypto}
+          onPress={onCurrencyPress}
         />
       );
     },
-    [onCurrencyPress, cryptoCurrencyIds]
+    [cryptoCurrencyIds, onCurrencyPress]
   );
 
   const renderEmptyList = useCallback(
@@ -60,6 +62,14 @@ const CurrencyListFragment = ({
   const handleSearchResults = useCallback((results: CurrencyInfo[]) => {
     setFilteredCurrencies(results);
   }, []);
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-white">
