@@ -1,80 +1,102 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
-import { CurrencyListFragment } from '../components/CurrencyListFragment';
+import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
+import CurrencyListFragment from '../components/CurrencyListFragment';
 import { CurrencyInfo } from '../types/currency';
+
+// Mock the CurrencySearchBar component since it has its own tests
+const mockOnSearchResults = jest.fn();
+jest.mock('../components/CurrencySearchBar', () => {
+  const { View } = require('react-native');
+  return jest.fn(({ onSearchResults, setSearchQuery }) => {
+    // Store the onSearchResults callback for later use in tests
+    mockOnSearchResults.mockImplementation(onSearchResults);
+    return (
+      <View
+        testID="currency-search-bar"
+        onResponderRelease={() => {}}
+      />
+    );
+  });
+});
 
 const mockCurrencies: CurrencyInfo[] = [
   { id: 'BTC', name: 'Bitcoin', symbol: 'BTC' },
   { id: 'ETH', name: 'Ethereum', symbol: 'ETH' },
-  { id: 'ETC', name: 'Ethereum Classic', symbol: 'ETC' },
+  { id: 'XRP', name: 'XRP', symbol: 'XRP' },
+  { id: 'SGD', name: 'Singapore Dollar', symbol: '$', code: 'SGD' },
 ];
 
 describe('CurrencyListFragment', () => {
-  it('renders all currencies when no search query', () => {
-    const { getAllByText } = render(
+  it('renders correctly with currencies', async () => {
+    const { getByTestId, getAllByTestId } = render(
       <CurrencyListFragment currencies={mockCurrencies} />
     );
 
-    expect(getAllByText(/Bitcoin|Ethereum|Ethereum Classic/)).toHaveLength(3);
+    await waitFor(() => {
+      expect(getByTestId('currency-list')).toBeTruthy();
+      expect(getByTestId('currency-search-bar')).toBeTruthy();
+      expect(getAllByTestId(/currency-list-/)).toHaveLength(mockCurrencies.length);
+    });
   });
 
-  it('filters currencies based on name prefix', () => {
-    const { getByPlaceholderText, getAllByText } = render(
-      <CurrencyListFragment currencies={mockCurrencies} />
+  it('displays empty state when no currencies are provided', async () => {
+    const { getByTestId, getByText } = render(
+      <CurrencyListFragment currencies={[]} />
     );
 
-    const searchInput = getByPlaceholderText('Search currencies...');
-    fireEvent.changeText(searchInput, 'Eth');
-
-    expect(getAllByText(/Ethereum|Ethereum Classic/)).toHaveLength(2);
+    await waitFor(() => {
+      expect(getByTestId('currency-list')).toBeTruthy();
+      expect(getByText('No Results')).toBeTruthy();
+    });
   });
 
-  it('filters currencies based on symbol prefix', () => {
-    const { getByPlaceholderText, getAllByText } = render(
-      <CurrencyListFragment currencies={mockCurrencies} />
-    );
-
-    const searchInput = getByPlaceholderText('Search currencies...');
-    fireEvent.changeText(searchInput, 'ET');
-
-    expect(getAllByText(/Ethereum|Ethereum Classic/)).toHaveLength(2);
-  });
-
-  it('shows empty state when no matches found', () => {
-    const { getByPlaceholderText, getByText } = render(
-      <CurrencyListFragment currencies={mockCurrencies} />
-    );
-
-    const searchInput = getByPlaceholderText('Search currencies...');
-    fireEvent.changeText(searchInput, 'XYZ');
-
-    expect(getByText('No Results')).toBeTruthy();
-  });
-
-  it('calls onCurrencyPress when currency is pressed', () => {
+  it('calls onCurrencyPress when a currency item is pressed', async () => {
     const onCurrencyPress = jest.fn();
-    const { getByText } = render(
+    const { getByTestId } = render(
       <CurrencyListFragment
         currencies={mockCurrencies}
         onCurrencyPress={onCurrencyPress}
       />
     );
 
-    fireEvent.press(getByText('Bitcoin'));
+    await act(async () => {
+      const currencyItem = getByTestId('currency-list-BTC');
+      fireEvent.press(currencyItem);
+    });
+
     expect(onCurrencyPress).toHaveBeenCalledWith(mockCurrencies[0]);
   });
 
-  it('clears search when clear button is pressed', () => {
-    const { getByPlaceholderText, getByText, getAllByText } = render(
+  it('renders crypto currencies with symbols; fiat currencies without symbols', async () => {
+    const { getByTestId, getByText, queryByText } = render(
       <CurrencyListFragment currencies={mockCurrencies} />
     );
 
-    const searchInput = getByPlaceholderText('Search currencies...');
-    fireEvent.changeText(searchInput, 'Eth');
-    expect(getAllByText(/Ethereum|Ethereum Classic/)).toHaveLength(2);
+    await waitFor(() => {
+      const btcItem = getByTestId('currency-list-BTC');
+      expect(btcItem).toBeTruthy();
+      expect(getByText('BTC')).toBeTruthy();
 
-    const clearButton = getByText('✕');
-    fireEvent.press(clearButton);
-    expect(getAllByText(/Bitcoin|Ethereum|Ethereum Classic/)).toHaveLength(3);
+      const sgdItem = getByTestId('currency-list-SGD');
+      expect(sgdItem).toBeTruthy();
+      expect(queryByText('$')).toBeNull();
+    });
   });
-}); 
+
+  it('updates filtered currencies when search results change', async () => {
+    const { getByTestId, getAllByTestId, getByText, queryByText } = render(
+      <CurrencyListFragment currencies={mockCurrencies} />
+    );
+
+    await act(async () => {
+      // Simulate search results by calling the captured onSearchResults callback
+      mockOnSearchResults([{ id: 'BTC', name: 'Bitcoin', symbol: 'BTC' }]);
+    });
+
+    await waitFor(() => {
+      expect(getAllByTestId(/currency-list-/)).toHaveLength(1);
+      expect(getByText('Bitcoin')).toBeTruthy();
+      expect(queryByText('Ethereum')).toBeNull();
+    });
+  });
+});

@@ -2,29 +2,25 @@ import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  Image,
+  FlatList
 } from 'react-native';
-import { Ionicons, FontAwesome} from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { CurrencyInfo } from '../types/currency';
-import { CurrencyListItem } from './CurrencyListItem';
+import CurrencyListItem from './CurrencyListItem';
 import { CRYPTO_CURRENCIES } from '../constants/currency';
-import { CurrencySearchBar } from './CurrencySearch';
-import {useFilteredCurrencies} from '../hooks/useFilteredCurrencies';
+import CurrencySearchBar from './CurrencySearchBar';
 
 type CurrencyListFragmentProps = {
   currencies: CurrencyInfo[];
   onCurrencyPress?: (currency: CurrencyInfo) => void;
 }; 
 
-export const CurrencyListFragment: React.FC<CurrencyListFragmentProps> = ({
+const CurrencyListFragment = ({
   currencies,
   onCurrencyPress,
-}) => {
+}: CurrencyListFragmentProps) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const filteredCurrencies = useFilteredCurrencies(currencies, searchQuery);
+  const [filteredCurrencies, setFilteredCurrencies] = useState<CurrencyInfo[]>(currencies);
 
   // Create a Set of crypto currency IDs for O(1) lookup
   const cryptoCurrencyIds = useMemo(() => 
@@ -61,16 +57,28 @@ export const CurrencyListFragment: React.FC<CurrencyListFragmentProps> = ({
     []
   );
 
+  const handleSearchResults = useCallback((results: CurrencyInfo[]) => {
+    setFilteredCurrencies(results);
+  }, []);
+
   return (
     <View className="flex-1 bg-white">
-      <CurrencySearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+     <CurrencySearchBar 
+        currencies={currencies}
+        searchQuery={searchQuery} 
+        setSearchQuery={setSearchQuery}
+        onSearchResults={handleSearchResults}
+      />
       <FlatList
         data={filteredCurrencies}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={renderEmptyList}
         contentContainerStyle={{ flexGrow: 1 }}
+        testID="currency-list"
       />
     </View>
   );
 }; 
+
+export default CurrencyListFragment;
