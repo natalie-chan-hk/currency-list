@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -21,6 +21,13 @@ const CurrencyListFragment = ({
 }: CurrencyListFragmentProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCurrencies, setFilteredCurrencies] = useState<CurrencyInfo[]>(currencies);
+
+  // Sync filteredCurrencies with currencies prop when it changes
+  useEffect(() => {
+    if (!searchQuery) {
+      setFilteredCurrencies(currencies);
+    }
+  }, [currencies, searchQuery]);
 
   // Create a Set of crypto currency IDs for O(1) lookup
   const cryptoCurrencyIds = useMemo(() => 
