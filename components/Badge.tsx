@@ -7,7 +7,7 @@ type BadgeProps = {
 
 export const Badge = ({
   title = '--',
-  style = 'bg-gray-900 rounded-full w-10 h-10 flex items-center justify-center mr-2',
+  style = 'bg-gray-900 rounded-full w-10 h-10 flex items-center justify-center',
   textStyle = 'text-white font-medium',
 }: BadgeProps) => {
   return (

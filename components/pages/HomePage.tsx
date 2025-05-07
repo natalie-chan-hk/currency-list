@@ -69,26 +69,31 @@ const HomePage = ({ navigation }: HomePageProps) => {
       title: 'Clear Data',
       onPress: handleClearData,
       disabled: isLoading,
+      isLoading: isLoading,
     },
     {
       title: 'Insert Data',
       onPress: handleInsertData,
       disabled: isLoading,
+      isLoading: isLoading,
     },
     {
       title: 'Show Crypto',
       onPress: handleShowCrypto,
       disabled: isLoading,
+      isLoading: isLoading,
     },
     {
       title: 'Show Fiat',
       onPress: handleShowFiat,
       disabled: isLoading,
+      isLoading: isLoading,
     },
     {
       title: 'Show All',
       onPress: handleShowAll,
       disabled: isLoading,
+      isLoading: isLoading,
     },
   ];
 
@@ -99,11 +104,6 @@ const HomePage = ({ navigation }: HomePageProps) => {
   return (
     <View className="flex-1 bg-white">
       <ScrollView className="flex-1 bg-white">
-        {isLoading && (
-          <View className="absolute inset-0 z-10 items-center justify-center bg-black/10">
-            <ActivityIndicator size="large" color="#0000ff" testID="loading-indicator" />
-          </View>
-        )}
         <View className="p-4">
           {menu.map((item, index) => (
             <MenuButton

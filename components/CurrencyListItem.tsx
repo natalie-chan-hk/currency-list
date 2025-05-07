@@ -17,7 +17,7 @@ const CurrencyListItem = ({ item, onPress, showSymbol = false }: CurrencyListIte
       onPress={() => onPress?.(item)}
       testID={`currency-list-${item.id}`}>
       <View className="flex-1 flex-row items-center justify-between">
-        <View className="flex-row items-center space-x-4" style={{ flexShrink: 1 }}>
+        <View className="flex-row items-center gap-x-4" style={{ flexShrink: 1 }}>
           <Badge title={item?.name?.charAt(0) || '--'} />
           <Text
             className="text-base font-medium"
@@ -27,8 +27,8 @@ const CurrencyListItem = ({ item, onPress, showSymbol = false }: CurrencyListIte
           </Text>
         </View>
         {showSymbol && (
-          <View className="flex-row items-center space-x-4">
-            <Text className="mr-2 text-base font-medium">{item.symbol}</Text>
+          <View className="flex-row items-center gap-x-4">
+            <Text className="text-base font-medium">{item.symbol}</Text>
             <Ionicons name="chevron-forward-outline" size={20} color="text-base" />
           </View>
         )}
