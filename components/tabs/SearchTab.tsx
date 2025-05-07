@@ -1,10 +1,11 @@
 import { View } from 'react-native';
 import React, { useState, useCallback, useEffect} from 'react';
-import type { BottomTabScreenProps, BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CurrencyInfo } from '../../types/currency';
 import { StorageService } from '../../services/storage';
 import CurrencyListFragment from '../CurrencyListFragment';
 import { RootTabParamList } from './type';
+
 type SearchTabProps = BottomTabScreenProps<RootTabParamList, 'Search'>;
 
 const SearchTab = ({ route }: SearchTabProps) => {
@@ -16,22 +17,39 @@ const SearchTab = ({ route }: SearchTabProps) => {
     }, []);
   
     useEffect(() => {
-      const { type } = (route.params || {}); 
-      
-      switch (type) {
-        case 'crypto':
-          setCurrentList(StorageService.getCryptoCurrencies());
-          break;
-        case 'fiat':
-          setCurrentList(StorageService.getFiatCurrencies());
-          break;
-        case 'all':
-        default:
-          const cryptoCurrencies = StorageService.getCryptoCurrencies();
-          const fiatCurrencies = StorageService.getFiatCurrencies();
-          setCurrentList([...cryptoCurrencies, ...fiatCurrencies]);
-          break;
-      }
+      const loadCurrencies = async () => {
+        const { type } = (route.params || {}); 
+        
+        try {
+          switch (type) {
+            case 'crypto': {
+              const cryptoList = await StorageService.getCryptoCurrencies();
+              setCurrentList(cryptoList);
+
+              break;
+            }
+            case 'fiat': {
+              const fiatList = await StorageService.getFiatCurrencies();
+              setCurrentList(fiatList);
+              break;
+            }
+            case 'all':
+            default: {
+              const [cryptoList, fiatList] = await Promise.all([
+                StorageService.getCryptoCurrencies(),
+                StorageService.getFiatCurrencies()
+              ]);
+              setCurrentList([...cryptoList, ...fiatList]);
+              break;
+            }
+          }
+        } catch (error) {
+          console.error('Error loading currencies:', error);
+          setCurrentList([]);
+        }
+      };
+
+      loadCurrencies();
     }, [route.params]);
   
     return (

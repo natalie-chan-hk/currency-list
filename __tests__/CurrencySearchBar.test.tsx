@@ -3,13 +3,6 @@ import { render, fireEvent, act } from '@testing-library/react-native';
 import CurrencySearchBar from '../components/CurrencySearchBar';
 import { CurrencyInfo } from '../types/currency';
 
-// Mock the CurrencySearchIndex
-jest.mock('../services/searchIndex', () => {
-  return jest.fn().mockImplementation(() => ({
-    search: jest.fn().mockReturnValue([]),
-  }));
-});
-
 // Mock @expo/vector-icons
 jest.mock('@expo/vector-icons', () => ({
   Ionicons: () => null,
