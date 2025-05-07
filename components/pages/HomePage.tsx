@@ -6,7 +6,7 @@ import { MenuButton } from '../buttons/MenuButton';
 import { StorageService } from '../../services/storage';
 import { CRYPTO_CURRENCIES, FIAT_CURRENCIES } from '../../constants/currency';
 import Toast, { ToastProps } from '../Toast';
- 
+
 type HomePageProps = StackScreenProps<RootStackParamList, 'Home'>;
 
 const HomePage = ({ navigation }: HomePageProps) => {
@@ -36,7 +36,7 @@ const HomePage = ({ navigation }: HomePageProps) => {
       setIsLoading(true);
       await Promise.all([
         StorageService.setCryptoCurrencies(CRYPTO_CURRENCIES),
-        StorageService.setFiatCurrencies(FIAT_CURRENCIES)
+        StorageService.setFiatCurrencies(FIAT_CURRENCIES),
       ]);
       setToast({
         message: 'Data inserted successfully',
@@ -100,29 +100,23 @@ const HomePage = ({ navigation }: HomePageProps) => {
     <View className="flex-1 bg-white">
       <ScrollView className="flex-1 bg-white">
         {isLoading && (
-          <View className="absolute inset-0 bg-black/10 z-10 items-center justify-center">
-            <ActivityIndicator size="large" color="#0000ff" testID="loading-indicator"/>
+          <View className="absolute inset-0 z-10 items-center justify-center bg-black/10">
+            <ActivityIndicator size="large" color="#0000ff" testID="loading-indicator" />
           </View>
         )}
-      <View className="p-4">
-        {menu.map((item, index) => (
-          <MenuButton
-            key={index}
-            title={item.title}
-            onPress={item.onPress}
-            disabled={item.disabled}
-            testID={`menu-button-${index}`}
-          />
-        ))}
-      </View>
+        <View className="p-4">
+          {menu.map((item, index) => (
+            <MenuButton
+              key={index}
+              title={item.title}
+              onPress={item.onPress}
+              disabled={item.disabled}
+              testID={`menu-button-${index}`}
+            />
+          ))}
+        </View>
       </ScrollView>
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onHide={hideToast}
-        />
-      )}
+      {toast && <Toast message={toast.message} type={toast.type} onHide={hideToast} />}
     </View>
   );
 };

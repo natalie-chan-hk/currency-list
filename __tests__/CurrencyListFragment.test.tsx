@@ -10,12 +10,7 @@ jest.mock('../components/CurrencySearchBar', () => {
   return jest.fn(({ onSearchResults, setSearchQuery }) => {
     // Store the onSearchResults callback for later use in tests
     mockOnSearchResults.mockImplementation(onSearchResults);
-    return (
-      <View
-        testID="currency-search-bar"
-        onResponderRelease={() => {}}
-      />
-    );
+    return <View testID="currency-search-bar" onResponderRelease={() => {}} />;
   });
 });
 
@@ -40,9 +35,7 @@ describe('CurrencyListFragment', () => {
   });
 
   it('displays empty state when no currencies are provided', async () => {
-    const { getByTestId, getByText } = render(
-      <CurrencyListFragment currencies={[]} />
-    );
+    const { getByTestId, getByText } = render(<CurrencyListFragment currencies={[]} />);
 
     await waitFor(() => {
       expect(getByTestId('currency-list')).toBeTruthy();
@@ -53,10 +46,7 @@ describe('CurrencyListFragment', () => {
   it('calls onCurrencyPress when a currency item is pressed', async () => {
     const onCurrencyPress = jest.fn();
     const { getByTestId } = render(
-      <CurrencyListFragment
-        currencies={mockCurrencies}
-        onCurrencyPress={onCurrencyPress}
-      />
+      <CurrencyListFragment currencies={mockCurrencies} onCurrencyPress={onCurrencyPress} />
     );
 
     await act(async () => {

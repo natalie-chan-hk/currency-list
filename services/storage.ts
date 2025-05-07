@@ -29,9 +29,12 @@ export const StorageService = {
   setCryptoCurrencies: async (currencies: CurrencyInfo[]): Promise<void> => {
     db.withTransactionSync(() => {
       db.execSync('DELETE FROM crypto_currencies');
-      currencies.forEach(currency => {
-        db.runSync('INSERT INTO crypto_currencies (id, name, symbol) VALUES (?, ?, ?)', 
-          [currency.id, currency.name, currency.symbol]);
+      currencies.forEach((currency) => {
+        db.runSync('INSERT INTO crypto_currencies (id, name, symbol) VALUES (?, ?, ?)', [
+          currency.id,
+          currency.name,
+          currency.symbol,
+        ]);
       });
     });
   },
@@ -44,13 +47,15 @@ export const StorageService = {
   setFiatCurrencies: async (currencies: CurrencyInfo[]): Promise<void> => {
     db.withTransactionSync(() => {
       db.execSync('DELETE FROM fiat_currencies');
-      currencies.forEach(currency => {
+      currencies.forEach((currency) => {
         const params = [currency.id, currency.name, currency.symbol];
         if (currency.code) {
           params.push(currency.code);
         }
-        db.runSync('INSERT INTO fiat_currencies (id, name, symbol, code) VALUES (?, ?, ?, ?)',
-          params);
+        db.runSync(
+          'INSERT INTO fiat_currencies (id, name, symbol, code) VALUES (?, ?, ?, ?)',
+          params
+        );
       });
     });
   },
@@ -66,4 +71,4 @@ export const StorageService = {
       db.execSync('DELETE FROM fiat_currencies');
     });
   },
-}; 
+};

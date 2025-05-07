@@ -46,11 +46,11 @@ describe('CurrencySearchBar', () => {
   it('handles search input changes', () => {
     const { getByPlaceholderText } = render(<CurrencySearchBar {...defaultProps} />);
     const input = getByPlaceholderText('Search currency');
-    
+
     act(() => {
       fireEvent.changeText(input, 'USD');
     });
-    
+
     expect(defaultProps.setSearchQuery).toHaveBeenCalledWith('USD');
     expect(defaultProps.onSearchResults).toHaveBeenCalled();
   });
@@ -59,19 +59,19 @@ describe('CurrencySearchBar', () => {
     const { getByTestId, getByPlaceholderText } = render(
       <CurrencySearchBar {...defaultProps} searchQuery="USD" />
     );
-    
+
     const input = getByPlaceholderText('Search currency');
-    
+
     // Focus the input first to show the buttons
     act(() => {
       fireEvent(input, 'focus');
     });
-    
+
     await act(async () => {
       const arrowBackButton = getByTestId('arrow-back-button');
       fireEvent.press(arrowBackButton);
     });
-    
+
     expect(defaultProps.setSearchQuery).toHaveBeenCalledWith('');
     expect(defaultProps.onSearchResults).toHaveBeenCalledWith(mockCurrencies);
   });
@@ -80,50 +80,48 @@ describe('CurrencySearchBar', () => {
     const { getByTestId, getByPlaceholderText } = render(
       <CurrencySearchBar {...defaultProps} searchQuery="USD" />
     );
-    
+
     const input = getByPlaceholderText('Search currency');
-    
+
     // Focus the input first to show the buttons
     act(() => {
       fireEvent(input, 'focus');
     });
-    
+
     await act(async () => {
       const closeButton = getByTestId('close-button');
       fireEvent.press(closeButton);
     });
-    
+
     expect(defaultProps.setSearchQuery).toHaveBeenCalledWith('');
     expect(defaultProps.onSearchResults).toHaveBeenCalledWith(mockCurrencies);
   });
 
   it('shows/hides buttons based on focus state', async () => {
-    const { getByPlaceholderText, queryByTestId } = render(
-      <CurrencySearchBar {...defaultProps} />
-    );
-    
+    const { getByPlaceholderText, queryByTestId } = render(<CurrencySearchBar {...defaultProps} />);
+
     const input = getByPlaceholderText('Search currency');
-    
+
     // Initially, buttons should not be visible
     expect(queryByTestId('arrow-back-button')).toBeNull();
     expect(queryByTestId('close-button')).toBeNull();
-    
+
     // Focus the input
     await act(async () => {
       fireEvent(input, 'focus');
     });
-    
+
     // Buttons should be visible
     expect(queryByTestId('arrow-back-button')).toBeTruthy();
     expect(queryByTestId('close-button')).toBeTruthy();
-    
+
     // Blur the input
     await act(async () => {
       fireEvent(input, 'blur');
     });
-    
+
     // Buttons should be hidden again
     expect(queryByTestId('arrow-back-button')).toBeNull();
     expect(queryByTestId('close-button')).toBeNull();
   });
-}); 
+});

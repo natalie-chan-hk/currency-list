@@ -91,8 +91,7 @@ const Toast = ({ message, type = 'info', duration = 2000, onHide }: ToastProps) 
           },
         ],
       }}
-      className={`absolute bottom-8 left-4 right-4 z-50 rounded-lg p-4 shadow-sm ${getBackgroundColor()}`}
-    >
+      className={`absolute bottom-8 left-4 right-4 z-50 rounded-lg p-4 shadow-sm ${getBackgroundColor()}`}>
       <View className="flex-row items-center">
         {renderIcon()}
         <Text className={`pl-2 font-medium ${getTextColor()}`}>{message}</Text>

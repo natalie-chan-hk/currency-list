@@ -1,4 +1,4 @@
-import { CurrencyInfo } from "../types/currency";
+import { CurrencyInfo } from '../types/currency';
 
 type InvertedIndex = {
   [token: string]: string[]; // Maps tokens or prefixes to coin IDs
@@ -20,7 +20,7 @@ class CurrencySearchIndex {
     coins.forEach((coin) => {
       const lowerName = coin.name.toLowerCase();
       const lowerSymbol = coin.symbol.toLowerCase();
-      const tokens = lowerName.split(" ");
+      const tokens = lowerName.split(' ');
 
       // Add full name and symbol as tokens
       this.addToIndex(lowerName, coin.id, index);
@@ -55,9 +55,7 @@ class CurrencySearchIndex {
     const lowerQuery = query.toLowerCase();
     const matchingCoinIds = this.index[lowerQuery] || [];
 
-    return matchingCoinIds.map(
-      (id) => this.coins.find((coin) => coin.id === id)!,
-    );
+    return matchingCoinIds.map((id) => this.coins.find((coin) => coin.id === id)!);
   }
 }
 

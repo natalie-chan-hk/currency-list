@@ -1,6 +1,6 @@
 module.exports = {
-  name: 'my-expo-app',
-  slug: 'my-expo-app',
+  name: 'currency-list-app',
+  slug: 'currency-list-app',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
@@ -13,14 +13,14 @@ module.exports = {
   assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: true,
-    bundleIdentifier: 'com.myexpoapp',
+    bundleIdentifier: 'com.currencylistapp',
   },
   android: {
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
-    package: 'com.myexpoapp',
+    package: 'com.currencylistapp',
   },
   web: {
     favicon: './assets/favicon.png',
@@ -33,4 +33,4 @@ module.exports = {
   extra: {
     newArchEnabled: true,
   },
-}; 
+};

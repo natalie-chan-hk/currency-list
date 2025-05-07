@@ -5,4 +5,4 @@ export type CurrencyInfo = {
   code?: string; // Optional for fiat currencies
 };
 
-export type CurrencyListType = 'crypto' | 'fiat'; 
+export type CurrencyListType = 'crypto' | 'fiat';

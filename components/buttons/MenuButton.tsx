@@ -15,12 +15,9 @@ export const MenuButton = ({ title, onPress, disabled, testID }: MenuButtonProps
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
-      className={`p-4 mb-2 rounded-lg ${backgroundColor}`}
-      testID={testID}
-    >
-      <Text className={`text-center font-medium ${textColor}`}>
-        {title}
-      </Text>
+      className={`mb-2 rounded-lg p-4 ${backgroundColor}`}
+      testID={testID}>
+      <Text className={`text-center font-medium ${textColor}`}>{title}</Text>
     </TouchableOpacity>
   );
 };

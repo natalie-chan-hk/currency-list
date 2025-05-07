@@ -12,11 +12,10 @@ export const DemoActivity = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: true,
-        }}
-      >
+        }}>
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="Search" component={SearchPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}; 
+};
