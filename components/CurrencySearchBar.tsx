@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { CurrencyInfo } from '../types/currency';
 import CurrencySearchIndex from '../services/currencySearchIndex';
+import useDebounce from '../hook/useDebounce';
 
 type CurrencySearchBarProps = {
   currencies: CurrencyInfo[];
@@ -25,6 +26,8 @@ const CurrencySearchBar = ({
   const inputRef = useRef<TextInput>(null);
   const searcherRef = useRef<CurrencySearchIndex | null>(null);
 
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
   useEffect(() => {
     searcherRef.current = new CurrencySearchIndex(currencies);
   }, [currencies]);
@@ -40,6 +43,11 @@ const CurrencySearchBar = ({
       iconScale.value = withTiming(0.5, { duration: 200 });
     }
   }, [isFocused]);
+
+  // Perform search when debounced query changes
+  useEffect(() => {
+    performSearch(debouncedSearchQuery);
+  }, [debouncedSearchQuery]);
 
   const animatedIconStyle = useAnimatedStyle(() => ({
     width: iconWidth.value,
@@ -62,7 +70,6 @@ const CurrencySearchBar = ({
 
   const handleQueryChange = (query: string) => {
     setSearchQuery(query);
-    performSearch(query);
   };
 
   return (
