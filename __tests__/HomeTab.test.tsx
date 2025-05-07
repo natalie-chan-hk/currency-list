@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
-import HomeTab from '../components/tabs/HomeTab';
+import HomePage from '../components/pages/HomePage';
 import { StorageService } from '../services/storage';
 import { CRYPTO_CURRENCIES, FIAT_CURRENCIES } from '../constants/currency';
 
@@ -23,7 +23,7 @@ const mockNavigation = {
     },
   }));
     
-  describe('HomeTab', () => {
+  describe('HomePage', () => {
     beforeEach(() => {
       jest.clearAllMocks();
     });
@@ -35,7 +35,7 @@ const mockNavigation = {
   
     it('1-should show loading state and disable buttons during clear data operation', async () => {
         const { getByText, queryByTestId, getByTestId, findByTestId} = render(
-          <HomeTab navigation={mockNavigation as any} route={mockRoute as any} />
+          <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
         );
     
         await act(async () => {
@@ -76,7 +76,7 @@ const mockNavigation = {
 
       it('2-should show loading state and disable buttons during insert data operation', async () => {
         const { getByText, queryByTestId, getByTestId} = render(
-          <HomeTab navigation={mockNavigation as any} route={mockRoute as any} />
+          <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
         );
     
         await act(async () => {
@@ -118,7 +118,7 @@ const mockNavigation = {
 
   it('should show success toast after successful clear data operation', async () => {
     const { getByText, findByText } = render(
-      <HomeTab navigation={mockNavigation as any} route={mockRoute as any} />
+      <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
     );
 
     await act(async () => {
@@ -135,7 +135,7 @@ const mockNavigation = {
 
   it('should show success toast after successful insert data operation', async () => {
     const { getByText, findByText } = render(
-      <HomeTab navigation={mockNavigation as any} route={mockRoute as any} />
+      <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
     );
 
     await act(async () => {
@@ -155,7 +155,7 @@ const mockNavigation = {
     (StorageService.clearAll as jest.Mock).mockRejectedValueOnce(new Error('Clear failed'));
 
     const { getByText, findByText } = render(
-      <HomeTab navigation={mockNavigation as any} route={mockRoute as any} />
+      <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
     );
 
     await act(async () => {
@@ -175,7 +175,7 @@ const mockNavigation = {
     (StorageService.setCryptoCurrencies as jest.Mock).mockRejectedValueOnce(new Error('Insert failed'));
 
     const { getByText, findByText } = render(
-      <HomeTab navigation={mockNavigation as any} route={mockRoute as any} />
+      <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
     );
 
     await act(async () => {
@@ -192,7 +192,7 @@ const mockNavigation = {
 
   it('should navigate to Search screen with correct type when Show Crypto is pressed', async () => {
     const { getByText } = render(
-      <HomeTab navigation={mockNavigation as any} route={mockRoute as any} />
+      <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
     );
 
     await act(async () => {
@@ -205,7 +205,7 @@ const mockNavigation = {
 
   it('should navigate to Search screen with correct type when Show Fiat is pressed', async () => {
     const { getByText } = render(
-      <HomeTab navigation={mockNavigation as any} route={mockRoute as any} />
+      <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
     );
 
     await act(async () => {
@@ -218,7 +218,7 @@ const mockNavigation = {
 
   it('should navigate to Search screen with correct type when Show All is pressed', async () => {
     const { getByText } = render(
-      <HomeTab navigation={mockNavigation as any} route={mockRoute as any} />
+      <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
     );
 
     await act(async () => {

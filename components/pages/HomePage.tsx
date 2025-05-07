@@ -1,15 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import { View, ScrollView, ActivityIndicator } from 'react-native';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { RootTabParamList } from './type';
+import type { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from './type';
 import { MenuButton } from '../buttons/MenuButton';
 import { StorageService } from '../../services/storage';
 import { CRYPTO_CURRENCIES, FIAT_CURRENCIES } from '../../constants/currency';
 import Toast, { ToastProps } from '../Toast';
  
-type HomeTabProps = BottomTabScreenProps<RootTabParamList, 'Home'>;
+type HomePageProps = StackScreenProps<RootStackParamList, 'Home'>;
 
-const HomeTab = ({ navigation }: HomeTabProps) => {
+const HomePage = ({ navigation }: HomePageProps) => {
   const [toast, setToast] = useState<ToastProps | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -127,4 +127,4 @@ const HomeTab = ({ navigation }: HomeTabProps) => {
   );
 };
 
-export default HomeTab;
+export default HomePage;

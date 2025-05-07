@@ -71,14 +71,14 @@ const CurrencySearchBar = ({
         <Animated.View style={[animatedIconStyle]} pointerEvents={isFocused ? 'auto' : 'none'}>
           {isFocused && (
             <TouchableOpacity onPress={handleClear} className="flex-1 justify-center items-center" testID="arrow-back-button">
-              <Ionicons name="arrow-back-outline" size={20} color="gray" />
+              <Ionicons name="arrow-back-outline" size={24} color="gray" />
             </TouchableOpacity>
           )}
         </Animated.View>
         <Animated.View className="flex-1">
           <TextInput
             ref={inputRef}
-            className="h-10 border border-gray-300 rounded-lg px-4"
+            className="h-11 border border-gray-300 rounded-lg px-4"
             placeholder="Search currency"
             value={searchQuery}
             onChangeText={handleQueryChange}
@@ -86,12 +86,13 @@ const CurrencySearchBar = ({
             autoCorrect={false}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            cursorColor="#6a7282"
           />
         </Animated.View>
         <Animated.View style={[animatedIconStyle]} pointerEvents={isFocused ? 'auto' : 'none'}>
           {isFocused && (
             <TouchableOpacity onPress={handleClear} className="flex-1 justify-center items-center" testID="close-button">
-              <Ionicons name="close-outline" size={20} color="gray" />
+              <Ionicons name="close-outline" size={24} color="gray" />
             </TouchableOpacity>
           )}
         </Animated.View>

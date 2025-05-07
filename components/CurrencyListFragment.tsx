@@ -58,7 +58,7 @@ const CurrencyListFragment = ({
           color="text-base text-gray-600"
         />
         <Text className="text-base text-gray-600">No Results</Text>
-        <Text className="text-base text-gray-700">Try {}</Text>
+        <Text className="text-base text-gray-700">Try "BTC"</Text>
       </View>
     ),
     []

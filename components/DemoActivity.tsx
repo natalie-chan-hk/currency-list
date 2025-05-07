@@ -1,25 +1,22 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import CustomTabBar from './CustomTabBar';
-import SearchTab from './tabs/SearchTab';
-import HomeTab from './tabs/HomeTab';
-import { RootTabParamList } from './tabs/type';
+import SearchPage from './pages/SearchPage';
+import HomePage from './pages/HomePage';
+import { RootStackParamList } from './pages/type';
 
-const Tab = createBottomTabNavigator<RootTabParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export const DemoActivity = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        tabBar={(props) => <CustomTabBar {...props} />}
+      <Stack.Navigator
         screenOptions={{
           headerShown: true,
-          animation: 'shift',
         }}
       >
-        <Tab.Screen name="Home" component={HomeTab} />
-        <Tab.Screen name="Search" component={SearchTab} />
-      </Tab.Navigator>
+        <Stack.Screen name="Home" component={HomePage} />
+        <Stack.Screen name="Search" component={SearchPage} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }; 

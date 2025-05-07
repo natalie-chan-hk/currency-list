@@ -1,14 +1,14 @@
 import { View } from 'react-native';
 import React, { useState, useCallback, useEffect} from 'react';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { StackScreenProps } from '@react-navigation/stack';
 import { CurrencyInfo } from '../../types/currency';
 import { StorageService } from '../../services/storage';
 import CurrencyListFragment from '../CurrencyListFragment';
-import { RootTabParamList } from './type';
+import { RootStackParamList } from './type';
 
-type SearchTabProps = BottomTabScreenProps<RootTabParamList, 'Search'>;
+type SearchPageProps = StackScreenProps<RootStackParamList, 'Search'>;
 
-const SearchTab = ({ route }: SearchTabProps) => {
+const SearchPage = ({ route }: SearchPageProps) => {
     const [currentList, setCurrentList] = useState<CurrencyInfo[]>([]);
     const [selectedCurrency, setSelectedCurrency] = useState<CurrencyInfo | null>(null);
   
@@ -64,4 +64,4 @@ const SearchTab = ({ route }: SearchTabProps) => {
     );
   };
 
-export default SearchTab;
+export default SearchPage;
