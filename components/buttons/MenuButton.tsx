@@ -1,21 +1,26 @@
+import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 
-type MenuButtonProps = {
-    title: string;
-    onPress: () => void;
-    style?: string
-  };
+export type MenuButtonProps = {
+  title: string;
+  onPress: () => void;
+  disabled?: boolean;
+  testID?: string;
+};
 
-export const MenuButton = ({ title = "--", onPress = () => {}, style = "bg-blue-100 p-3 rounded-lg mb-2 shadow-xs"
-}: MenuButtonProps) => {
+export const MenuButton = ({ title, onPress, disabled, testID }: MenuButtonProps) => {
+  const backgroundColor = disabled ? 'bg-gray-300' : 'bg-blue-100';
+  const textColor = disabled ? 'text-gray-500' : 'text-blue-900';
   return (
     <TouchableOpacity
-    className={style}
-    onPress={onPress}
-  >
-    <Text className="text-white text-blue-900 text-center font-medium">
-      {title}
-    </Text>
-  </TouchableOpacity>
+      onPress={onPress}
+      disabled={disabled}
+      className={`p-4 mb-2 rounded-lg ${backgroundColor}`}
+      testID={testID}
+    >
+      <Text className={`text-center font-medium ${textColor}`}>
+        {title}
+      </Text>
+    </TouchableOpacity>
   );
 };

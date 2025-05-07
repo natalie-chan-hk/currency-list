@@ -83,6 +83,7 @@ const CurrencySearchBar = ({
             value={searchQuery}
             onChangeText={handleQueryChange}
             autoCapitalize="none"
+            autoCorrect={false}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />

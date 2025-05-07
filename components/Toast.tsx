@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { View, Text, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -11,9 +11,11 @@ export type ToastProps = {
 
 const Toast = ({ message, type = 'info', duration = 2000, onHide }: ToastProps) => {
   const opacity = new Animated.Value(0);
+  const animationRef = useRef<Animated.CompositeAnimation | null>(null);
 
   useEffect(() => {
-    Animated.sequence([
+    // Start the animation sequence
+    animationRef.current = Animated.sequence([
       Animated.timing(opacity, {
         toValue: 1,
         duration: 300,
@@ -25,10 +27,23 @@ const Toast = ({ message, type = 'info', duration = 2000, onHide }: ToastProps) 
         duration: 300,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      onHide?.();
+    ]);
+
+    animationRef.current.start(() => {
+      // Defer onHide to avoid scheduling updates during effect
+      setTimeout(() => {
+        onHide?.();
+      }, 0);
     });
-  }, []);
+
+    // Clean up animation on unmount
+    return () => {
+      if (animationRef.current) {
+        animationRef.current.stop();
+        animationRef.current = null;
+      }
+    };
+  }, [duration, onHide]);
 
   const getBackgroundColor = () => {
     switch (type) {
@@ -57,7 +72,7 @@ const Toast = ({ message, type = 'info', duration = 2000, onHide }: ToastProps) 
       case 'success':
         return <Ionicons name="checkmark-circle" size={32} color="#006045" />;
       case 'error':
-        return <Ionicons name="alert-sharp" size={32} color="#9f0712" />
+        return <Ionicons name="alert-sharp" size={32} color="#9f0712" />;
       default:
         return null;
     }
@@ -78,12 +93,12 @@ const Toast = ({ message, type = 'info', duration = 2000, onHide }: ToastProps) 
       }}
       className={`absolute bottom-8 left-4 right-4 z-50 rounded-lg p-4 shadow-sm ${getBackgroundColor()}`}
     >
-        <View className="flex-row items-center">
-            {renderIcon()}
-            <Text className={`pl-2 font-medium ${getTextColor()}`}>{message}</Text>
-        </View>
+      <View className="flex-row items-center">
+        {renderIcon()}
+        <Text className={`pl-2 font-medium ${getTextColor()}`}>{message}</Text>
+      </View>
     </Animated.View>
   );
 };
 
-export default Toast; 
+export default Toast;
