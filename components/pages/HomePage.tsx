@@ -9,13 +9,31 @@ import Toast, { ToastProps } from '../Toast';
 
 type HomePageProps = StackScreenProps<RootStackParamList, 'Home'>;
 
+type LoadingStates = {
+  clearData: boolean;
+  insertData: boolean;
+  showCrypto: boolean;
+  showFiat: boolean;
+  showAll: boolean;
+};
+
 const HomePage = ({ navigation }: HomePageProps) => {
   const [toast, setToast] = useState<ToastProps | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingStates, setLoadingStates] = useState<LoadingStates>({
+    clearData: false,
+    insertData: false,
+    showCrypto: false,
+    showFiat: false,
+    showAll: false,
+  });
+
+  const setLoadingState = (key: keyof LoadingStates, value: boolean) => {
+    setLoadingStates(prev => ({ ...prev, [key]: value }));
+  };
 
   const handleClearData = useCallback(async () => {
     try {
-      setIsLoading(true);
+      setLoadingState('clearData', true);
       await StorageService.clearAll();
       setToast({
         message: 'Data cleared successfully',
@@ -27,13 +45,13 @@ const HomePage = ({ navigation }: HomePageProps) => {
         type: 'error',
       });
     } finally {
-      setIsLoading(false);
+      setLoadingState('clearData', false);
     }
   }, []);
 
   const handleInsertData = useCallback(async () => {
     try {
-      setIsLoading(true);
+      setLoadingState('insertData', true);
       await Promise.all([
         StorageService.setCryptoCurrencies(CRYPTO_CURRENCIES),
         StorageService.setFiatCurrencies(FIAT_CURRENCIES),
@@ -48,7 +66,7 @@ const HomePage = ({ navigation }: HomePageProps) => {
         type: 'error',
       });
     } finally {
-      setIsLoading(false);
+      setLoadingState('insertData', false);
     }
   }, []);
 
@@ -68,32 +86,32 @@ const HomePage = ({ navigation }: HomePageProps) => {
     {
       title: 'Clear Data',
       onPress: handleClearData,
-      disabled: isLoading,
-      isLoading: isLoading,
+      disabled: loadingStates.clearData || loadingStates.insertData,
+      isLoading: loadingStates.clearData,
     },
     {
       title: 'Insert Data',
       onPress: handleInsertData,
-      disabled: isLoading,
-      isLoading: isLoading,
+      disabled: loadingStates.clearData || loadingStates.insertData,
+      isLoading: loadingStates.insertData,
     },
     {
       title: 'Show Crypto',
       onPress: handleShowCrypto,
-      disabled: isLoading,
-      isLoading: isLoading,
+      disabled: loadingStates.showCrypto,
+      isLoading: loadingStates.showCrypto,
     },
     {
       title: 'Show Fiat',
       onPress: handleShowFiat,
-      disabled: isLoading,
-      isLoading: isLoading,
+      disabled: loadingStates.showFiat,
+      isLoading: loadingStates.showFiat,
     },
     {
       title: 'Show All',
       onPress: handleShowAll,
-      disabled: isLoading,
-      isLoading: isLoading,
+      disabled: loadingStates.showAll,
+      isLoading: loadingStates.showAll,
     },
   ];
 
@@ -111,6 +129,7 @@ const HomePage = ({ navigation }: HomePageProps) => {
               title={item.title}
               onPress={item.onPress}
               disabled={item.disabled}
+              isLoading={item.isLoading}
               testID={`menu-button-${index}`}
             />
           ))}
