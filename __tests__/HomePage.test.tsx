@@ -39,7 +39,7 @@ describe('HomePage', () => {
     jest.clearAllMocks();
   });
 
-  it('should show disable buttons during clear data operation', async () => {
+  it('should disable only Clear Data and Insert Data buttons during clear data operation', async () => {
     const { getByText, getByTestId } = render(
       <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
     );
@@ -51,17 +51,23 @@ describe('HomePage', () => {
 
     // Check button disabled states and loading indicators
     await waitFor(() => {
-      const menuButton0 = getByTestId('menu-button-0');
-      const menuButton1 = getByTestId('menu-button-1');
-      const menuButton2 = getByTestId('menu-button-2');
-      const menuButton3 = getByTestId('menu-button-3');
-      const menuButton4 = getByTestId('menu-button-4');
+      const menuButton0 = getByTestId('menu-button-0'); // Clear Data
+      const menuButton1 = getByTestId('menu-button-1'); // Insert Data
+      const menuButton2 = getByTestId('menu-button-2'); // Show Crypto
+      const menuButton3 = getByTestId('menu-button-3'); // Show Fiat
+      const menuButton4 = getByTestId('menu-button-4'); // Show All
 
+      // Clear Data and Insert Data should be disabled
       expect(menuButton0.props.accessibilityState.disabled).toBe(true);
       expect(menuButton1.props.accessibilityState.disabled).toBe(true);
-      expect(menuButton2.props.accessibilityState.disabled).toBe(true);
-      expect(menuButton3.props.accessibilityState.disabled).toBe(true);
-      expect(menuButton4.props.accessibilityState.disabled).toBe(true);
+      
+      // Other buttons should remain enabled
+      expect(menuButton2.props.accessibilityState.disabled).toBe(false);
+      expect(menuButton3.props.accessibilityState.disabled).toBe(false);
+      expect(menuButton4.props.accessibilityState.disabled).toBe(false);
+
+      // Only Clear Data should show loading
+      expect(getByTestId('loading-indicator')).toBeTruthy();
     });
 
     // Wait for the operation to complete
@@ -73,19 +79,14 @@ describe('HomePage', () => {
     await waitFor(() => {
       const menuButton0 = getByTestId('menu-button-0');
       const menuButton1 = getByTestId('menu-button-1');
-      const menuButton2 = getByTestId('menu-button-2');
-      const menuButton3 = getByTestId('menu-button-3');
-      const menuButton4 = getByTestId('menu-button-4');
 
+      // All buttons should be enabled after operation completes
       expect(menuButton0.props.accessibilityState.disabled).toBe(false);
       expect(menuButton1.props.accessibilityState.disabled).toBe(false);
-      expect(menuButton2.props.accessibilityState.disabled).toBe(false);
-      expect(menuButton3.props.accessibilityState.disabled).toBe(false);
-      expect(menuButton4.props.accessibilityState.disabled).toBe(false);
     });
   });
 
-  it('should show disable buttons during insert data operation', async () => {
+  it('should disable only Clear Data and Insert Data buttons during insert data operation', async () => {
     const { getByText, getByTestId } = render(
       <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
     );
@@ -97,17 +98,23 @@ describe('HomePage', () => {
 
     // Check button disabled states and loading indicators
     await waitFor(() => {
-      const menuButton0 = getByTestId('menu-button-0');
-      const menuButton1 = getByTestId('menu-button-1');
-      const menuButton2 = getByTestId('menu-button-2');
-      const menuButton3 = getByTestId('menu-button-3');
-      const menuButton4 = getByTestId('menu-button-4');
+      const menuButton0 = getByTestId('menu-button-0'); // Clear Data
+      const menuButton1 = getByTestId('menu-button-1'); // Insert Data
+      const menuButton2 = getByTestId('menu-button-2'); // Show Crypto
+      const menuButton3 = getByTestId('menu-button-3'); // Show Fiat
+      const menuButton4 = getByTestId('menu-button-4'); // Show All
 
+      // Clear Data and Insert Data should be disabled
       expect(menuButton0.props.accessibilityState.disabled).toBe(true);
       expect(menuButton1.props.accessibilityState.disabled).toBe(true);
-      expect(menuButton2.props.accessibilityState.disabled).toBe(true);
-      expect(menuButton3.props.accessibilityState.disabled).toBe(true);
-      expect(menuButton4.props.accessibilityState.disabled).toBe(true);
+      
+      // Other buttons should remain enabled
+      expect(menuButton2.props.accessibilityState.disabled).toBe(false);
+      expect(menuButton3.props.accessibilityState.disabled).toBe(false);
+      expect(menuButton4.props.accessibilityState.disabled).toBe(false);
+
+      // Only Insert Data should show loading
+      expect(getByTestId('loading-indicator')).toBeTruthy();
     });
 
     // Wait for the operation to complete
@@ -120,22 +127,10 @@ describe('HomePage', () => {
     await waitFor(() => {
       const menuButton0 = getByTestId('menu-button-0');
       const menuButton1 = getByTestId('menu-button-1');
-      const menuButton2 = getByTestId('menu-button-2');
-      const menuButton3 = getByTestId('menu-button-3');
-      const menuButton4 = getByTestId('menu-button-4');
 
+      // All buttons should be enabled after operation completes
       expect(menuButton0.props.accessibilityState.disabled).toBe(false);
       expect(menuButton1.props.accessibilityState.disabled).toBe(false);
-      expect(menuButton2.props.accessibilityState.disabled).toBe(false);
-      expect(menuButton3.props.accessibilityState.disabled).toBe(false);
-      expect(menuButton4.props.accessibilityState.disabled).toBe(false);
-
-      // // Check that loading indicators are gone
-      // expect(menuButton0.queryByTestId('loading-indicator')).toBeNull();
-      // expect(menuButton1.queryByTestId('loading-indicator')).toBeNull();
-      // expect(menuButton2.queryByTestId('loading-indicator')).toBeNull();
-      // expect(menuButton3.queryByTestId('loading-indicator')).toBeNull();
-      // expect(menuButton4.queryByTestId('loading-indicator')).toBeNull();
     });
   });
 
@@ -252,5 +247,25 @@ describe('HomePage', () => {
     });
 
     expect(mockNavigation.navigate).toHaveBeenCalledWith('Search', { type: 'all' });
+  });
+
+  it('should allow navigation operations while data operations are in progress', async () => {
+    const { getByText } = render(
+      <HomePage navigation={mockNavigation as any} route={mockRoute as any} />
+    );
+
+    // Start clear data operation
+    await act(async () => {
+      const clearButton = getByText('Clear Data');
+      fireEvent.press(clearButton);
+    });
+
+    // Should be able to navigate while clear operation is in progress
+    await act(async () => {
+      const showCryptoButton = getByText('Show Crypto');
+      fireEvent.press(showCryptoButton);
+    });
+
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('Search', { type: 'crypto' });
   });
 });
