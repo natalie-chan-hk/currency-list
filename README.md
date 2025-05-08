@@ -67,3 +67,6 @@ currency-list/
 ## Development
 
 The project uses TypeScript for type safety and better development experience.
+
+## Icon Attribution
+Designed by Freepik.
