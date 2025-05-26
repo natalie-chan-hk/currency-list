@@ -1,5 +1,4 @@
-import React from 'react';
-import { TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 
 export type MenuButtonProps = {
   title: string;

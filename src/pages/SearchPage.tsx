@@ -1,10 +1,11 @@
-import { View } from 'react-native';
-import React, { useState, useCallback, useEffect } from 'react';
 import type { StackScreenProps } from '@react-navigation/stack';
-import { CurrencyInfo } from '../../types/currency';
-import { StorageService } from '../../services/storage';
-import CurrencyListFragment from '../CurrencyListFragment';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View } from 'react-native';
+
 import { RootStackParamList } from './type';
+import CurrencyListFragment from '../components/CurrencyListFragment';
+import { StorageService } from '../services/storage';
+import { CurrencyInfo } from '../types/currency';
 
 type SearchPageProps = StackScreenProps<RootStackParamList, 'Search'>;
 

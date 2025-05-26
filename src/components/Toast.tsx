@@ -1,6 +1,6 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef } from 'react';
 import { View, Text, Animated } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 export type ToastProps = {
   message: string;

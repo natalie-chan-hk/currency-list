@@ -1,10 +1,11 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState, useRef } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { CurrencyInfo } from '../types/currency';
-import CurrencySearchIndex from '../services/currencySearchIndex';
-import useDebounce from '../hooks/useDebounce';
+
+import useDebounce from '../../hooks/useDebounce';
+import CurrencySearchIndex from '../../services/currencySearchIndex';
+import { CurrencyInfo } from '../../types/currency';
 
 type CurrencySearchBarProps = {
   currencies: CurrencyInfo[];

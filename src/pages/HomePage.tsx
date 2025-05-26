@@ -1,11 +1,12 @@
-import React, { useState, useCallback } from 'react';
-import { View, ScrollView, ActivityIndicator } from 'react-native';
 import type { StackScreenProps } from '@react-navigation/stack';
+import React, { useState, useCallback } from 'react';
+import { View, ScrollView } from 'react-native';
+
 import { RootStackParamList } from './type';
-import { MenuButton } from '../buttons/MenuButton';
-import { StorageService } from '../../services/storage';
-import { CRYPTO_CURRENCIES, FIAT_CURRENCIES } from '../../constants/currency';
-import Toast, { ToastProps } from '../Toast';
+import Toast, { ToastProps } from '../components/Toast';
+import { MenuButton } from '../components/buttons/MenuButton';
+import { CRYPTO_CURRENCIES, FIAT_CURRENCIES } from '../constants/currency';
+import { StorageService } from '../services/storage';
 
 type HomePageProps = StackScreenProps<RootStackParamList, 'Home'>;
 

@@ -1,4 +1,5 @@
 import * as SQLite from 'expo-sqlite';
+
 import { CurrencyInfo } from '../types/currency';
 
 const db = SQLite.openDatabaseSync('currencies.db');

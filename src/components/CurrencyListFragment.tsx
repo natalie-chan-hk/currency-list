@@ -1,10 +1,11 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { View, Text, FlatList } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { CurrencyInfo } from '../types/currency';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { View, Text, FlatList } from 'react-native';
+
 import CurrencyListItem from './CurrencyListItem';
+import CurrencySearchBar from './inputs/CurrencySearchBar';
 import { CRYPTO_CURRENCIES } from '../constants/currency';
-import CurrencySearchBar from './CurrencySearchBar';
+import { CurrencyInfo } from '../types/currency';
 
 type CurrencyListFragmentProps = {
   currencies: CurrencyInfo[];

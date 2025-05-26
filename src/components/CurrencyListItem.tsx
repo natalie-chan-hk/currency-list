@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import { CurrencyInfo } from '../types/currency';
-import { Badge } from './Badge';
 import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity } from 'react-native';
+
+import { Badge } from './Badge';
+import { CurrencyInfo } from '../types/currency';
 
 type CurrencyListItemProps = {
   item: CurrencyInfo;
