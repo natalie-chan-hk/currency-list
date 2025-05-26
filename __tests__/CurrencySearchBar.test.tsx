@@ -1,7 +1,7 @@
-import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react-native';
-import CurrencySearchBar from '../components/CurrencySearchBar';
-import { CurrencyInfo } from '../types/currency';
+
+import CurrencySearchBar from '../src/components/inputs/CurrencySearchBar';
+import { CurrencyInfo } from '../src/types/currency';
 
 // Mock @expo/vector-icons
 jest.mock('@expo/vector-icons', () => ({

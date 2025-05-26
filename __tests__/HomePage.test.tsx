@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
-import HomePage from '../components/pages/HomePage';
-import { StorageService } from '../services/storage';
-import { CRYPTO_CURRENCIES, FIAT_CURRENCIES } from '../constants/currency';
+
+import { CRYPTO_CURRENCIES, FIAT_CURRENCIES } from '../src/constants/currency';
+import HomePage from '../src/pages/HomePage';
+import { StorageService } from '../src/services/storage';
 
 // Mock the navigation
 const mockNavigation = {
@@ -15,7 +15,7 @@ const mockRoute = {
 };
 
 // Mock the StorageService
-jest.mock('../services/storage', () => ({
+jest.mock('../src/services/storage', () => ({
   StorageService: {
     clearAll: jest
       .fn()
@@ -60,7 +60,7 @@ describe('HomePage', () => {
       // Clear Data and Insert Data should be disabled
       expect(menuButton0.props.accessibilityState.disabled).toBe(true);
       expect(menuButton1.props.accessibilityState.disabled).toBe(true);
-      
+
       // Other buttons should remain enabled
       expect(menuButton2.props.accessibilityState.disabled).toBe(false);
       expect(menuButton3.props.accessibilityState.disabled).toBe(false);
@@ -107,7 +107,7 @@ describe('HomePage', () => {
       // Clear Data and Insert Data should be disabled
       expect(menuButton0.props.accessibilityState.disabled).toBe(true);
       expect(menuButton1.props.accessibilityState.disabled).toBe(true);
-      
+
       // Other buttons should remain enabled
       expect(menuButton2.props.accessibilityState.disabled).toBe(false);
       expect(menuButton3.props.accessibilityState.disabled).toBe(false);

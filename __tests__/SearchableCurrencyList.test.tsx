@@ -1,11 +1,11 @@
-import React from 'react';
 import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
-import CurrencyListFragment from '../components/CurrencyListFragment';
-import { CurrencyInfo } from '../types/currency';
+
+import SearchableCurrencyList from '../src/components/SearchableCurrencyList';
+import { CurrencyInfo } from '../src/types/currency';
 
 // Mock the CurrencySearchBar component since it has its own tests
 const mockOnSearchResults = jest.fn();
-jest.mock('../components/CurrencySearchBar', () => {
+jest.mock('../src/components/inputs/CurrencySearchBar', () => {
   const { View } = require('react-native');
   return jest.fn(({ onSearchResults, setSearchQuery }) => {
     // Store the onSearchResults callback for later use in tests
@@ -21,10 +21,10 @@ const mockCurrencies: CurrencyInfo[] = [
   { id: 'SGD', name: 'Singapore Dollar', symbol: '$', code: 'SGD' },
 ];
 
-describe('CurrencyListFragment', () => {
+describe('SearchableCurrencyList', () => {
   it('renders correctly with currencies', async () => {
     const { getByTestId, getAllByTestId } = render(
-      <CurrencyListFragment currencies={mockCurrencies} />
+      <SearchableCurrencyList currencies={mockCurrencies} />
     );
 
     await waitFor(() => {
@@ -35,7 +35,7 @@ describe('CurrencyListFragment', () => {
   });
 
   it('displays empty state when no currencies are provided', async () => {
-    const { getByTestId, getByText } = render(<CurrencyListFragment currencies={[]} />);
+    const { getByTestId, getByText } = render(<SearchableCurrencyList currencies={[]} />);
 
     await waitFor(() => {
       expect(getByTestId('currency-list')).toBeTruthy();
@@ -46,7 +46,7 @@ describe('CurrencyListFragment', () => {
   it('calls onCurrencyPress when a currency item is pressed', async () => {
     const onCurrencyPress = jest.fn();
     const { getByTestId } = render(
-      <CurrencyListFragment currencies={mockCurrencies} onCurrencyPress={onCurrencyPress} />
+      <SearchableCurrencyList currencies={mockCurrencies} onCurrencyPress={onCurrencyPress} />
     );
 
     await act(async () => {
@@ -59,7 +59,7 @@ describe('CurrencyListFragment', () => {
 
   it('renders crypto currencies with symbols; fiat currencies without symbols', async () => {
     const { getByTestId, getByText, queryByText } = render(
-      <CurrencyListFragment currencies={mockCurrencies} />
+      <SearchableCurrencyList currencies={mockCurrencies} />
     );
 
     await waitFor(() => {
@@ -75,7 +75,7 @@ describe('CurrencyListFragment', () => {
 
   it('updates filtered currencies when search results change', async () => {
     const { getByTestId, getAllByTestId, getByText, queryByText } = render(
-      <CurrencyListFragment currencies={mockCurrencies} />
+      <SearchableCurrencyList currencies={mockCurrencies} />
     );
 
     await act(async () => {

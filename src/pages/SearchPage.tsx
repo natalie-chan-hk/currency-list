@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View } from 'react-native';
 
 import { RootStackParamList } from './type';
-import CurrencyListFragment from '../components/CurrencyListFragment';
+import SearchableCurrencyList from '../components/SearchableCurrencyList';
 import { StorageService } from '../services/storage';
 import { CurrencyInfo } from '../types/currency';
 
@@ -56,7 +56,7 @@ const SearchPage = ({ route }: SearchPageProps) => {
   return (
     <View className="flex-1 bg-white">
       <View className="flex-1">
-        <CurrencyListFragment currencies={currentList} onCurrencyPress={handleCurrencyPress} />
+        <SearchableCurrencyList currencies={currentList} onCurrencyPress={handleCurrencyPress} />
       </View>
     </View>
   );

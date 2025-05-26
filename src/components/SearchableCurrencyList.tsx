@@ -7,12 +7,12 @@ import CurrencySearchBar from './inputs/CurrencySearchBar';
 import { CRYPTO_CURRENCIES } from '../constants/currency';
 import { CurrencyInfo } from '../types/currency';
 
-type CurrencyListFragmentProps = {
+type SearchableCurrencyListProps = {
   currencies: CurrencyInfo[];
   onCurrencyPress?: (currency: CurrencyInfo) => void;
 };
 
-const CurrencyListFragment = ({ currencies, onCurrencyPress }: CurrencyListFragmentProps) => {
+const SearchableCurrencyList = ({ currencies, onCurrencyPress }: SearchableCurrencyListProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCurrencies, setFilteredCurrencies] = useState<CurrencyInfo[]>(currencies);
 
@@ -72,4 +72,4 @@ const CurrencyListFragment = ({ currencies, onCurrencyPress }: CurrencyListFragm
   );
 };
 
-export default CurrencyListFragment;
+export default SearchableCurrencyList;
